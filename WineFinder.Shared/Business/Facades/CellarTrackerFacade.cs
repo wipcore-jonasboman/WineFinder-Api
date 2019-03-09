@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security;
 using System.Xml;
 using WineFinder.Shared.Extensions;
 using WineFinder.Shared.Models;
@@ -29,7 +32,7 @@ namespace WineFinder.Shared.Business.Facades
             var xml = GetXmlDataFromUrl(url);
             if (xml.DoesNotValidate())
             {
-                throw new UnauthorizedAccessException("Incorrect credentials");
+                throw new SecurityException("incorrect_credentials");
             }
 
             return MapToWineListItems(xml);
@@ -63,9 +66,32 @@ namespace WineFinder.Shared.Business.Facades
         /// <returns></returns>
         private XmlDocument GetXmlDataFromUrl(string url)
         {
-            XmlDocument doc1 = new XmlDocument();
-            doc1.Load(url);
-            return doc1;
+            try
+            {
+                XmlDocument urlData = new XmlDocument();
+                HttpWebRequest rq = (HttpWebRequest)WebRequest.Create(url);
+
+                rq.Timeout = 60000;
+
+                HttpWebResponse response = rq.GetResponse() as HttpWebResponse;
+
+                // New check added to dash's answer.
+                if (response.ContentType.Contains("text/xml"))
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        XmlTextReader reader = new XmlTextReader(responseStream);
+                        urlData.Load(reader);
+                    }
+                }
+
+                return urlData;
+            }
+            catch (Exception)
+            {
+                throw new Exception("service_down");
+            }
+
         }
     }
 }

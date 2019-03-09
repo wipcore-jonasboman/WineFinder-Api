@@ -4,9 +4,7 @@
     {
         public static bool Validates(this System.Xml.XmlNode node)
         {
-            return (
-                !string.IsNullOrEmpty(node["Wine"].ToString())
-                );
+            return !string.IsNullOrEmpty(node["Wine"].ToString());
         }
 
         public static bool DoesNotValidate(this System.Xml.XmlDocument xmlDoc)

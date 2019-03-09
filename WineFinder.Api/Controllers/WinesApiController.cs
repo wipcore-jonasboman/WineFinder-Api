@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using WineFinder.Shared.Extensions;
 using WineFinder.Shared.Models;
@@ -21,7 +19,7 @@ namespace MinaViner.Controllers
             var key = Request.Headers.GetValue("X-Authorization-Key");
 
             if (string.IsNullOrEmpty(handle) || string.IsNullOrEmpty(key))
-                return BadRequest("Error in credentials - check the login form");
+                return BadRequest("error_in_credentials");
 
             try
             {
