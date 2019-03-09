@@ -24,18 +24,8 @@ namespace WineFinder.Shared.Models
             Pending = GetNumeric(node["Pending"].InnerText);
             Id = GetNumeric(node["iWine"].InnerText);
             Points = GetDecimal(node["CT"].InnerText);
-            if (node["Location"] != null) Location = node["Location"].InnerText;
-            if (node["Bin"] != null) Bin = node["Bin"].InnerText;
-        }
-
-        private decimal GetDecimal(string value)
-        {
-            return (decimal.TryParse(value.Replace('−', '-'), out decimal res)) ? decimal.Round(res) : 0;
-        }
-
-        private int GetNumeric(string value)
-        {
-            return (int.TryParse(value, out int res)) ? res : 0;
+            Location = node["Location"]?.InnerText;
+            Bin = node["Bin"]?.InnerText;
         }
 
         public int Id { get; private set; }
@@ -60,6 +50,16 @@ namespace WineFinder.Shared.Models
         public decimal CostSum { get { return (BottlesBought * Price); } }
         public string Location { get; set; }
         public string Bin { get; set; }
+
+        private decimal GetDecimal(string value)
+        {
+            return (decimal.TryParse(value.Replace('−', '-'), out decimal res)) ? decimal.Round(res) : 0;
+        }
+
+        private int GetNumeric(string value)
+        {
+            return (int.TryParse(value, out int res)) ? res : 0;
+        }
 
         private WineType GetWineType(string typeFromString)
         {
@@ -96,21 +96,5 @@ namespace WineFinder.Shared.Models
             }
             return wineType;
         }
-    }
-    
-    public enum WineType
-    {
-        RedWine = 1,
-        WhiteWine = 2,
-        Sparkling = 3,
-        Undefined = 4,
-        Other = 5
-    }
-
-    public enum ShowType
-    {
-        Normal = 0, // not showing hidden wines nor wines not in stock
-        Pending = 1,
-        All = 2 // even bottles no longer in stock
     }
 }

@@ -74,8 +74,10 @@
     <Compile Include="Extensions\HttpHeadersResponseExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
+    <Compile Include="Models\ShowType.cs" />
     <Compile Include="Models\WineRequestData.cs" />
     <Compile Include="Models\CredentialsErrorException.cs" />
+    <Compile Include="Models\WineType.cs" />
     <Compile Include="Services\WineService.cs" />
     <Compile Include="Models\WineItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
