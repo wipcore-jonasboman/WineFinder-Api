@@ -70,20 +70,18 @@ namespace WineFinder.Shared.Models
             WineType wineType;
             switch (typeFromString.Trim().ToLower())
             {
-                case "rött vin":
                 case "red":
                     {
                         wineType = WineType.RedWine;
                         break;
                     }
-                case "vitt vin":
                 case "white":
                     {
                         wineType = WineType.WhiteWine;
                         break;
                     }
-                case "mousserande vin":
                 case "white - sparkling":
+                case "rosé - sparkling":
                     {
                         wineType = WineType.Sparkling;
                         break;
