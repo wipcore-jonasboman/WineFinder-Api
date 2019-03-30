@@ -74,6 +74,7 @@
     <Compile Include="Extensions\HttpHeadersResponseExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Models\ShowType.cs" />
     <Compile Include="Models\WineRequestData.cs" />
     <Compile Include="Models\WineType.cs" />

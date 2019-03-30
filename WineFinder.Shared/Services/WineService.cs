@@ -20,6 +20,10 @@ namespace WineFinder.Shared.Services
             _winesCacheKey += $"{handle}_{key}".GetHashCode();
         }
 
+        public WineService()
+        {
+        }
+
         public List<WineItem> Get(WineRequestData request)
         {
             var wines = CacheHelper.Get<List<WineItem>>(_winesCacheKey);
@@ -52,6 +56,53 @@ namespace WineFinder.Shared.Services
                     return wines.Where(wine => wine.Quantity > 0).ToList();
                 }
             }
+        }
+
+        public List<WineItem> GetSharedWines(string listId)
+        {
+            var wines = CacheHelper.Get<List<WineItem>>(listId);
+            return wines;
+        }
+
+        public string CreateSharedList(WineRequestData request)
+        {
+            var wines = CacheHelper.Get<List<WineItem>>(_winesCacheKey);
+            var listId = StringHelper.CreateListId();
+
+            if (request.ForceUpdate || wines == null)
+            {
+                var cellarTrackerFacade = new CellarTrackerFacade(_handle, _key);
+                wines = cellarTrackerFacade.LoadWines(request.IncludeLocation);
+            }
+
+            if (wines == null)
+                return string.Empty;
+
+            switch (request.ShowType)
+            {
+                case ShowType.All:
+                    {
+                        break;
+                    }
+                case ShowType.Pending:
+                    {
+                        wines = wines.Where(wine => wine.Pending > 0).ToList();
+                        break;
+                    }
+                default:
+                    {
+                        wines = wines.Where(wine => wine.Quantity > 0).ToList();
+                        break;
+                    }
+            }
+
+            if (wines.Any())
+            {
+                CacheHelper.Set(listId, wines);
+                return listId;
+            }
+
+            return string.Empty;
         }
     }
 }
