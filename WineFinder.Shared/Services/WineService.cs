@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using WineFinder.Shared.Business.Facades;
 using WineFinder.Shared.Helpers;
 using WineFinder.Shared.Models;
@@ -67,8 +68,6 @@ namespace WineFinder.Shared.Services
         public string CreateSharedList(WineRequestData request)
         {
             var wines = CacheHelper.Get<List<WineItem>>(_winesCacheKey);
-            var listId = StringHelper.CreateListId();
-
             if (request.ForceUpdate || wines == null)
             {
                 var cellarTrackerFacade = new CellarTrackerFacade(_handle, _key);
@@ -98,6 +97,7 @@ namespace WineFinder.Shared.Services
 
             if (wines.Any())
             {
+                var listId = StringHelper.CreateListId();
                 CacheHelper.Set(listId, wines);
                 return listId;
             }

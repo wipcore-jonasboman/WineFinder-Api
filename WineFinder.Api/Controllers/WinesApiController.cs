@@ -50,15 +50,23 @@ namespace MinaViner.Controllers
 
             try
             {
-                var wineService = new WineService(handle, key);
-                var listId = wineService.CreateSharedList(data);
-
-                if (string.IsNullOrWhiteSpace(listId))
+                string listId = string.Empty;
+                if (System.Web.HttpContext.Current.Session["listId"] != null)
                 {
-                    return NotFound();
+                    listId = System.Web.HttpContext.Current.Session["listId"].ToString();
+                }
+                else
+                {
+                    var wineService = new WineService(handle, key);
+                    listId = wineService.CreateSharedList(data);
                 }
 
-                return Ok<string>(listId);
+                if (!string.IsNullOrWhiteSpace(listId))
+                {
+                    System.Web.HttpContext.Current.Session["listId"] = listId;
+                    return Ok<string>(listId); 
+                }
+                return NotFound();
             }
             catch (Exception ex)
             {
