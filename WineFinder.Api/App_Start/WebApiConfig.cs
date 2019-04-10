@@ -5,6 +5,9 @@ namespace MinaViner.App_Start
 {
     public static class WebApiConfig
     {
+        public static string UrlPrefix { get { return "api"; } }
+        public static string UrlPrefixRelative { get { return "~/api"; } }
+
         public static void Register(HttpConfiguration config)
         {
             var cors = new EnableCorsAttribute("http://localhost:3000", "*", "GET,POST");
